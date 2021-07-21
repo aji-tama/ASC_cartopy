@@ -1,2 +1,2 @@
 # ASC_cartopy
-Astronomical info panel with allsky image. Cartopy package is required.
+real time(updated every min) astronomical info panel with allsky image. Cartopy package is required.
