@@ -1857,10 +1857,12 @@ def refresh_sky(i):
     try:
         urlretrieve('http://www.hokoon.edu.hk/weather/images/astimages/hkneac_asc.jpg', 'asc.jpg')
         asc = Image.open('asc.jpg')
+        asc = asc.resize((720,480),Image.ANTIALIAS)
     except ContentTooShortError: # try again
         timelog('try again')
         urlretrieve('http://www.hokoon.edu.hk/weather/images/astimages/hkneac_asc.jpg', 'asc.jpg')
-        asc = Image.open('asc.jpg')        
+        asc = Image.open('asc.jpg')
+        asc = asc.resize((720,480),Image.ANTIALIAS)
     except HTTPError:
         asc = Image.open(pathlib.Path.cwd().joinpath('ASC','serverdead.jpg'))
     except:
