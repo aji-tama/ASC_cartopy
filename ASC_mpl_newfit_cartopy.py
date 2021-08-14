@@ -23,6 +23,7 @@ import time
 #from numba import jit
 from urllib.request import urlretrieve, urlopen
 from urllib.error import HTTPError, ContentTooShortError
+import socket
 import requests
 from bs4 import BeautifulSoup
 import matplotlib
@@ -197,6 +198,7 @@ elif platform == 'linux':
     DjV_S_10    = font_manager.FontProperties(fname = '/home/pi/.local/share/fonts/Unknown Vendor/TrueType/DejaVu Sans/DejaVu_Sans_Book.ttf', size=10)
     DjV_S_12    = font_manager.FontProperties(fname = '/home/pi/.local/share/fonts/Unknown Vendor/TrueType/DejaVu Sans/DejaVu_Sans_Book.ttf', size=12)
     emoji_20    = font_manager.FontProperties(fname = '/home/pi/.local/share/fonts/Unknown Vendor/TrueType/Yu Gothic/Yu_Gothic_Bold.ttc', size=20)
+    chara_chi   = font_manager.FontProperties(fname = '/home/pi/.local/share/fonts/Unknown Vendor/TrueType/SimHei/SimHei_Normal.TTF')
 
 # log
 def timelog(log):
@@ -845,8 +847,17 @@ def write_label(x,y,z,c1,c2,c3):
 
     ax0.annotate(OBS[4]+'\n'+OBS[6],(hori_xmin+x,hori_ymin+y),ha='left',va='bottom',color=c1,zorder=12+2.5+z)
     ax0.annotate(OBS[3]+'\n'+OBS[5],(hori_xmin+x+65,hori_ymin+y),ha='right',va='bottom',color=c1,zorder=12+2.5+z)
-    ax0.annotate('Ho Koon Nature Education cum\nAstronomical Centre',(hori_xmax+x,hori_ymax+y),ha='right',va='top',color=c1,zorder=12+2.5+z)
+    ax0.annotate('可觀自然教育中心暨天文館',(hori_xmax+x,hori_ymax+y),ha='right',va='top',fontproperties=chara_chi,fontsize=10,color=c1,zorder=12+2.5+z)
+    ax0.annotate('Ho Koon Nature Education cum\nAstronomical Centre',(hori_xmax+x,hori_ymax+y-10),ha='right',va='top',color=c1,zorder=12+2.5+z)
     ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x,hori_ymin+y),ha='right',color=c1,zorder=12+2.5+z)
+    ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x+1,hori_ymin+y+1),ha='right',color='k',zorder=12+2.4+z)
+    ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x,hori_ymin+y+1),ha='right',color='k',zorder=12+2.4+z)
+    ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x-1,hori_ymin+y+1),ha='right',color='k',zorder=12+2.4+z)
+    ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x+1,hori_ymin+y),ha='right',color='k',zorder=12+2.4+z)
+    ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x-1,hori_ymin+y),ha='right',color='k',zorder=12+2.4+z)
+    ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x+1,hori_ymin+y-1),ha='right',color='k',zorder=12+2.4+z)
+    ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x,hori_ymin+y-1),ha='right',color='k',zorder=12+2.4+z)
+    ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x-1,hori_ymin+y-1),ha='right',color='k',zorder=12+2.4+z)
     ax0.annotate('ephemeris by Skyfield',(360+x,hori_ymin+y),rotation=90,ha='right',va='bottom',color=c2,zorder=12+2.5+z)
 
     Ts1 = time.time()
@@ -1602,7 +1613,8 @@ def cloud_detection(): #ax4
 ##            ax4.annotate('hr-avg',(-85,-30),xycoords=('data'),ha='left',va='bottom',fontproperties=DjV_S_6,color=l_color,alpha=1)
 ##            ax4.annotate('now',(-85,-38),xycoords=('data'),ha='left',va='bottom',fontproperties=DjV_S_6,color='g',alpha=0.75)
 
-    except:
+    except Exception as e:
+        print(e)
         ax4.annotate('_(:3」∠)_ fail',(0,0),xycoords=('data'),ha='center',va='center',fontproperties=emoji_20, color='white',zorder=3)
         ax4.set_facecolor('red')
 
@@ -1611,6 +1623,12 @@ def cloud_detection(): #ax4
 
 def ephemeris(): #ax5
     Tep0 = time.time()
+
+    # PyEphem, as skyfield cant compute all mag
+    import ephem as PyEphem
+    PyEphem.Observer().lon = str(114+6/60+29/3600)
+    PyEphem.Observer().lat = str(22+23/60+1/3600)
+    PyEphem.Observer().date = datetime.utcnow().replace(second=0,microsecond=0)
 
     timelog('Ephemeris')
 
@@ -1642,7 +1660,10 @@ def ephemeris(): #ax5
             ax5.annotate(str(ti.astimezone(tz).strftime('%X')),(set_x,moon_y),xycoords=('data'),ha='center',va='center',fontproperties=DjV_S_10,color=('green' if ti.astimezone(tz).date() > date_local.date() else 'orange'))
 
 ##    ax5.annotate(str(round(Moon.mag,1)),(mag_x,moon_y),xycoords=('data'),ha='right',va='center',fontproperties=DjV_S_10,color='yellow')
-    
+    moon_PE = PyEphem.Moon()
+    moon_PE.compute(PyEphem.Observer())  
+    ax5.annotate(str(round(moon_PE.mag,1)),(mag_x,moon_y),xycoords=('data'),ha='right',va='center',fontproperties=DjV_S_10,color='yellow')
+
     # Mercury
     mercury_y = 65
     ax5.annotate('\u263F',(sym_x,mercury_y),xycoords=('data'),ha='left',va='center',fontproperties=DjV_S_10,color='#97979F')
@@ -1681,6 +1702,9 @@ def ephemeris(): #ax5
             ax5.annotate(str(ti.astimezone(tz).strftime('%X')),(set_x,mars_y),xycoords=('data'),ha='center',va='center',fontproperties=DjV_S_10,color=('green' if ti.astimezone(tz).date() > date_local.date() else 'orange'))
 
 ##    ax5.annotate(str(round(planetary_magnitude(mars_vector),1)),(mag_x,mars_y),xycoords=('data'),ha='right',va='center',fontproperties=DjV_S_10,color='yellow')
+    mars_PE = PyEphem.Mars()
+    mars_PE.compute(PyEphem.Observer())  
+    ax5.annotate(str(round(mars_PE.mag,1)),(mag_x,mars_y),xycoords=('data'),ha='right',va='center',fontproperties=DjV_S_10,color='yellow')
 
     # Jupiter
     jupiter_y = 5
@@ -1707,6 +1731,9 @@ def ephemeris(): #ax5
             ax5.annotate(str(ti.astimezone(tz).strftime('%X')),(set_x,saturn_y),xycoords=('data'),ha='center',va='center',fontproperties=DjV_S_10,color=('green' if ti.astimezone(tz).date() > date_local.date() else 'orange'))
 
 ##    ax5.annotate(str(round(planetary_magnitude(saturn_vector),1)),(mag_x,saturn_y),xycoords=('data'),ha='right',va='center',fontproperties=DjV_S_10,color='yellow')
+    saturn_PE = PyEphem.Saturn()
+    saturn_PE.compute(PyEphem.Observer())  
+    ax5.annotate(str(round(saturn_PE.mag,1)),(mag_x,saturn_y),xycoords=('data'),ha='right',va='center',fontproperties=DjV_S_10,color='yellow')
 
     # Uranus
     uranus_y = -35
@@ -1733,6 +1760,9 @@ def ephemeris(): #ax5
             ax5.annotate(str(ti.astimezone(tz).strftime('%X')),(set_x,neptune_y),xycoords=('data'),ha='center',va='center',fontproperties=DjV_S_10,color=('green' if ti.astimezone(tz).date() > date_local.date() else 'orange'))
 
 ##    ax5.annotate(str(round(planetary_magnitude(neptune_vector),1)),(mag_x,neptune_y),xycoords=('data'),ha='right',va='center',fontproperties=DjV_S_10,color='yellow')
+    neptune_PE = PyEphem.Neptune()
+    neptune_PE.compute(PyEphem.Observer())  
+    ax5.annotate(str(round((neptune_PE.mag),1)),(mag_x,neptune_y),xycoords=('data'),ha='right',va='center',fontproperties=DjV_S_10,color='yellow')
 
     ###################################################################################################################################################
     
@@ -1854,18 +1884,26 @@ def refresh_sky(i):
     date_local  = date_UTC.astimezone(tz)
 
     # update ASC
+    socket.setdefaulttimeout(10)
     try:
-        urlretrieve('http://www.hokoon.edu.hk/weather/images/astimages/hkneac_asc.jpg', 'asc.jpg')
-        asc = Image.open('asc.jpg')
-        asc = asc.resize((720,480),Image.ANTIALIAS)
-    except ContentTooShortError: # try again
-        timelog('try again')
-        urlretrieve('http://www.hokoon.edu.hk/weather/images/astimages/hkneac_asc.jpg', 'asc.jpg')
-        asc = Image.open('asc.jpg')
-        asc = asc.resize((720,480),Image.ANTIALIAS)
-    except HTTPError:
-        asc = Image.open(pathlib.Path.cwd().joinpath('ASC','serverdead.jpg'))
-    except:
+        try:
+            urlretrieve('http://www.hokoon.edu.hk/weather/images/astimages/hkneac_asc.jpg', 'asc.jpg')
+            asc = Image.open('asc.jpg')
+            asc = asc.resize((720,480),Image.ANTIALIAS)
+#     except ContentTooShortError: # try again
+#         timelog('try again')
+#         urlretrieve('http://www.hokoon.edu.hk/weather/images/astimages/hkneac_asc.jpg', 'asc.jpg')
+#         asc = Image.open('asc.jpg')
+#         asc = asc.resize((720,480),Image.ANTIALIAS)
+        except Exception as e:
+            print(e)
+            urlretrieve('http://192.168.1.222/weather/images/astimages/hkneac_asc.jpg', 'asc.jpg')
+            asc = Image.open('asc.jpg')
+            asc = asc.resize((720,480),Image.ANTIALIAS)
+#     except HTTPError:
+#         asc = Image.open(pathlib.Path.cwd().joinpath('ASC','serverdead.jpg'))
+    except Exception as e:
+        print(e)
         asc = Image.open(pathlib.Path.cwd().joinpath('ASC','black.jpg'))
         
     # update transformation
@@ -1909,12 +1947,20 @@ def refresh_sky(i):
     print('')
     objgraph.show_growth()
     print('')
+
+def refresh_refresh_sky(i):
+    try:
+        refresh_sky(i)
+    except Exception as e:
+        print(e)
+        pass
+    
     
 if platform == 'win32':
     #ani = matplotlib.animation.FuncAnimation(fig, refresh_sky, repeat=False, interval=45000, save_count=0)
-    ani = matplotlib.animation.FuncAnimation(fig, refresh_sky, repeat=False, interval=10000, save_count=0)
+    ani = matplotlib.animation.FuncAnimation(fig, refresh_refresh_sky, repeat=False, interval=10000, save_count=0)
 else:
-    ani = matplotlib.animation.FuncAnimation(fig, refresh_sky, repeat=False, interval=44000, save_count=0)
+    ani = matplotlib.animation.FuncAnimation(fig, refresh_refresh_sky, repeat=False, interval=44000, save_count=0)
 
 timelog('backend is '+str(matplotlib.get_backend()))
 
