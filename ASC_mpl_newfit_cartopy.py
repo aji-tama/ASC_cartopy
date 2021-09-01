@@ -860,7 +860,7 @@ def write_label(x,y,z,c1,c2,c3):
     ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x+1,hori_ymin+y-1),ha='right',color='k',zorder=12+2.4+z)
     ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x,hori_ymin+y-1),ha='right',color='k',zorder=12+2.4+z)
     ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x-1,hori_ymin+y-1),ha='right',color='k',zorder=12+2.4+z)
-    ax0.annotate('ephemeris by Skyfield',(360+x,hori_ymin+y),rotation=90,ha='right',va='bottom',color=c2,zorder=12+2.5+z)
+    ax0.annotate('ephemeris by Skyfield (ascl:1907.024)',(360+x,hori_ymin+y),rotation=90,ha='right',va='bottom',color=c2,zorder=12+2.5+z)
 
     Ts1 = time.time()
     #print(Ts1-Ts0)
