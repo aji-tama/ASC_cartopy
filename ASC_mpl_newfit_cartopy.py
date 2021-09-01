@@ -58,6 +58,8 @@ import feedparser
 import re
 import objgraph
 
+import rclone
+
 ##################
 #memory leak
 debug_mode = 0
@@ -972,19 +974,19 @@ def write_weather():
         print('no sun la')
         pass
     
-    #bus 51
-    try:
-        link_bus = 'https://data.etabus.gov.hk/v1/transport/kmb/stop-eta/F4B90466198A6DA7'
-        html_bus = requests.get(link_bus).text
-        busETA = datetime.strptime(eval(html_bus)['data'][0]['eta'],'%Y-%m-%dT%H:%M:%S+08:00')
-        
-        ax0.annotate('next KMB 51\nestimated time of arrival:\n'+
-                     str(busETA.time())+'\n'+
-                     str('{:.1f}'.format((busETA-datetime.now()).total_seconds()/60))+
-                     ' \u00B1 1 mins left',(-358,220),ha='left',va='top',fontproperties=DjV_S_12,color='w')
-    except:
-        print('cant get bus info')
-    
+#     #bus 51
+#     try:
+#         link_bus = 'https://data.etabus.gov.hk/v1/transport/kmb/stop-eta/F4B90466198A6DA7'
+#         html_bus = requests.get(link_bus).text
+#         busETA = datetime.strptime(eval(html_bus)['data'][0]['eta'],'%Y-%m-%dT%H:%M:%S+08:00')
+#         
+#         ax0.annotate('next KMB 51\nestimated time of arrival:\n'+
+#                      str(busETA.time())+'\n'+
+#                      str('{:.1f}'.format((busETA-datetime.now()).total_seconds()/60))+
+#                      ' \u00B1 1 mins left',(-358,220),ha='left',va='top',fontproperties=DjV_S_12,color='w')
+#     except:
+#         print('cant get bus info')
+#     
     #print(Tw1-Tw0)
     #print(Tw2-Tw1)
     #print(Tw3-Tw2)
@@ -1923,7 +1925,13 @@ def refresh_sky(i):
     #fig.savefig('Hokoon_ASIM_'+str("{:%Y_%m_%d-%H_%M_%S}".format(datetime.now()))+'.png')
     #plt.savefig('Hokoon_ASIM_'+str("{:%Y_%m_%d-%H_%M_%S}".format(datetime.now()))+'.png')
     plt.savefig('Hokoon_ASIM.png')
-    #plt.close(fig)
+    
+    # upload to Dropbox
+    cfg_path = r'/home/pi/.config/rclone/rclone.conf'
+    with open(cfg_path) as f:
+        cfg = f.read()
+        
+    ULdropbox = rclone.with_config(cfg).copy('/home/pi/Desktop/Hokoon_ASIM.png','webpage:webpage')
 
     ########################
     # save and trim record #
@@ -1960,7 +1968,7 @@ if platform == 'win32':
     #ani = matplotlib.animation.FuncAnimation(fig, refresh_sky, repeat=False, interval=45000, save_count=0)
     ani = matplotlib.animation.FuncAnimation(fig, refresh_refresh_sky, repeat=False, interval=10000, save_count=0)
 else:
-    ani = matplotlib.animation.FuncAnimation(fig, refresh_refresh_sky, repeat=False, interval=44000, save_count=0)
+    ani = matplotlib.animation.FuncAnimation(fig, refresh_refresh_sky, repeat=False, interval=30000, save_count=0)
 
 timelog('backend is '+str(matplotlib.get_backend()))
 
