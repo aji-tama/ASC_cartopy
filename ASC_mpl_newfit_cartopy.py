@@ -31,6 +31,7 @@ matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import matplotlib.path as mpath
+import matplotlib.patheffects as pe
 from matplotlib import font_manager
 from matplotlib import collections as mc
 import matplotlib.animation
@@ -851,15 +852,15 @@ def write_label(x,y,z,c1,c2,c3):
     ax0.annotate(OBS[3]+'\n'+OBS[5],(hori_xmin+x+65,hori_ymin+y),ha='right',va='bottom',color=c1,zorder=12+2.5+z)
     ax0.annotate('可觀自然教育中心暨天文館',(hori_xmax+x,hori_ymax+y),ha='right',va='top',fontproperties=chara_chi,fontsize=10,color=c1,zorder=12+2.5+z)
     ax0.annotate('Ho Koon Nature Education cum\nAstronomical Centre',(hori_xmax+x,hori_ymax+y-10),ha='right',va='top',color=c1,zorder=12+2.5+z)
-    ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x,hori_ymin+y),ha='right',color=c1,zorder=12+2.5+z)
-    ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x+1,hori_ymin+y+1),ha='right',color='k',zorder=12+2.4+z)
-    ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x,hori_ymin+y+1),ha='right',color='k',zorder=12+2.4+z)
-    ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x-1,hori_ymin+y+1),ha='right',color='k',zorder=12+2.4+z)
-    ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x+1,hori_ymin+y),ha='right',color='k',zorder=12+2.4+z)
-    ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x-1,hori_ymin+y),ha='right',color='k',zorder=12+2.4+z)
-    ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x+1,hori_ymin+y-1),ha='right',color='k',zorder=12+2.4+z)
-    ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x,hori_ymin+y-1),ha='right',color='k',zorder=12+2.4+z)
-    ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x-1,hori_ymin+y-1),ha='right',color='k',zorder=12+2.4+z)
+    ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x,hori_ymin+y),ha='right',color=c1,path_effects=[pe.withStroke(linewidth=1,foreground='k')],zorder=12+2.5+z)
+#     ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x+1,hori_ymin+y+1),ha='right',color='k',zorder=12+2.4+z)
+#     ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x,hori_ymin+y+1),ha='right',color='k',zorder=12+2.4+z)
+#     ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x-1,hori_ymin+y+1),ha='right',color='k',zorder=12+2.4+z)
+#     ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x+1,hori_ymin+y),ha='right',color='k',zorder=12+2.4+z)
+#     ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x-1,hori_ymin+y),ha='right',color='k',zorder=12+2.4+z)
+#     ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x+1,hori_ymin+y-1),ha='right',color='k',zorder=12+2.4+z)
+#     ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x,hori_ymin+y-1),ha='right',color='k',zorder=12+2.4+z)
+#     ax0.annotate('sky at HKT '+str(date_local.strftime('%d/%m/%Y %H:%M:%S')),(hori_xmax+x-1,hori_ymin+y-1),ha='right',color='k',zorder=12+2.4+z)
     ax0.annotate('ephemeris by Skyfield (ascl:1907.024)',(360+x,hori_ymin+y),rotation=90,ha='right',va='bottom',color=c2,zorder=12+2.5+z)
 
     Ts1 = time.time()
