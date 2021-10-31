@@ -1,8 +1,13 @@
 # ASC_cartopy
-real time(updated every min) astronomical info panel with allsky image. Cartopy package is required.
+![Screenshot](Hokoon_ASIM.png?raw=true "Screenshot")
+
+## **Overview**
+This project shows realtime astronomical info, and overlays constellations & planet positions on allsky images from Ho Koon Nature Education cum Astronomical Centre, Hong Kong. It will update every minute.
+
+## **Features**
+- 
 
 ## **Update**
-
 20211012 - text outline updated
 
-![Screenshot](Hokoon_ASIM.png?raw=true "Screenshot")
+
