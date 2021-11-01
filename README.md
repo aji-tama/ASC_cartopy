@@ -8,6 +8,7 @@ Most of the astronomical calculations are done with help of [Skyfield](http://rh
 
 ## **Features**
 - realtime constellations, planets, sun and moon positions overlaid on allsky images monitoring cloud coverage over Ho Koon sky
+- moon symbol flips according to its relative positve with sun
 - moonphase, with equatorial and selenographic cardinal points marked, is always shown with zenith upwards, matching the orientation when you look up in the sky
 - jovian moons configuration along celestial equator
 - mercury and venus phases, of which orientation is along celestial equator, and their cooresponding distance from the sun; **AVOID looking at mersury and venus when they are too close to the sun**
